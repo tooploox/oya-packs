@@ -1,4 +1,0 @@
-Project: docker
-
-generate: |
-  . $BasePath/dockerize.sh $BasePath
