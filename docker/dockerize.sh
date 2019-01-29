@@ -7,6 +7,24 @@ if [ -f Dockerfile ]; then
     fi
 fi
 
-# TODO: fetch language from flags and use proper Dockerfile
+DEFAULT_LANG="ruby"
+lang=$DEFAULT_LANG
+
+detectProjectLang () {
+    if [ -f package.json ]; then
+        lang="nodejs"
+    fi
+    if [ -f Rakefile ]; then
+        lang="ruby"
+    fi
+    if [ -f go.mod ]; then
+        lang="go"
+    fi
+    if [[ -n $(find . -name "__init__.py") ]]; then
+        lang="python"
+    fi
+}
+detectProjectLang
+
 BasePath=$1
-cp $BasePath/Dockerfile-ruby ./Dockerfile
+cp $BasePath/Dockerfile-$lang ./Dockerfile
