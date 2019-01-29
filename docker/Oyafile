@@ -1,0 +1,5 @@
+Project: docker
+
+generate: |
+  echo "Generating Dockerfile"
+  echo "Get language"
