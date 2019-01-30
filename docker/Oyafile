@@ -1,4 +1,20 @@
 Project: docker
 
+Values:
+  image: oya-project-image
+  port: 8000
+
 generate: |
   . $BasePath/dockerize.sh $BasePath
+
+build: |
+  echo "Docker -> build $image"
+  docker build -t $image .
+
+run: |
+  echo "Docker -> run $image port $port"
+  docker run -it -d -p $port:$port $image
+
+stop: |
+  echo "Docker -> stop $image"
+  docker ps | grep $image | cut -d' ' -f1 | xargs docker stop
