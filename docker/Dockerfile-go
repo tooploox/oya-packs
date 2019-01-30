@@ -1,10 +1,9 @@
 FROM golang
 
-RUN mkdir /app
-WORKDIR /app
-COPY . /app
+COPY . /go/src/app
+WORKDIR /go/src/app
 
 RUN go get
+RUN go build app.go
 
-EXPOSE 8080
-CMD [ "go", "run", "start.go" ]
+CMD [ "app" ]

@@ -3,7 +3,7 @@ if [ -f Dockerfile ]; then
     if [ "$yn" = "Y" ] || [ "$yn" = "y" ]; then
         override=true # TODO: write nagive if and get rid of it
     else
-        exit
+        exit 0
     fi
 fi
 

@@ -6,5 +6,4 @@ COPY . /app
 
 RUN pip install
 
-EXPOSE 8080
 CMD [ "python", "./my_script.py" ]
