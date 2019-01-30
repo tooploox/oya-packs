@@ -17,7 +17,7 @@ detectProjectLang () {
     if [ -f Rakefile ]; then
         lang="ruby"
     fi
-    if [ -f go.mod ]; then
+    if [[ -n $(find . -maxdepth 1 -type f -name "*.go") ]]; then
         lang="go"
     fi
     if [[ -n $(find . -name "__init__.py") ]]; then
