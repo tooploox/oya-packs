@@ -1,0 +1,4 @@
+Project: cricleci
+
+generate : |
+  $BasePath/circleci.sh $BasePath
