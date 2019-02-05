@@ -2,3 +2,6 @@ Project: cricleci
 
 generate : |
   $BasePath/circleci.sh $BasePath
+  echo -e "\033[0;32m Oya circleCI generated."
+  echo -e "\033[0;31m [Warning] \033[0m You have to edit your Oyafile to add onPush and onMergeToMaster hooks."
+  echo " Check README if you dont know how to do it."
