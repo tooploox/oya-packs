@@ -1,0 +1,77 @@
+defaults: &defaults
+  working_directory: ~/oya-project
+  docker:
+    - image: circleci/ruby:2.5-node-browsers
+      environment:
+        RAILS_ENV: test
+
+version: 2
+jobs:
+  bundle_dependencies:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/oya-project
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+      - run: bundle install --jobs=4 --retry=3 --path vendor/bundle
+      - save_cache:
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+          paths:
+            - ~/repo/vendor/bundle
+      - persist_to_workspace:
+          root: .
+          paths: vendor/bundle
+
+  oya_dependencies:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/oya-project
+      - run: curl -O https://s3.eu-central-1.amazonaws.com/oyabinary/oya
+      - run: chmod +x oya
+      - persist_to_workspace:
+          root: .
+          paths:
+            - oya
+            - .oya
+
+  rake_test:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/oya-project
+      - run: bundle --path vendor/bundle
+      - run: ./oya run onPush
+
+
+  deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/oya-project
+      - run: bundle --path vendor/bundle
+      - run: ./oya run onMergeToMaster
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - bundle_dependencies
+      - oya_dependencies
+      - rake_test:
+          requires:
+            - bundle_dependencies
+            - oya_dependencies
+      - deploy:
+          requires:
+            - rake_test
+          filters:
+            branches:
+              only:
+                - master
