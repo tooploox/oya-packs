@@ -1,6 +1,6 @@
 # Oya Docker Pack
 
-    $ oya import github.com/bart84ek/oya-packs/docker
+    $ oya import github.com/tooploox/oya-packs/docker
 
     $ oya run docker.generate
     $ oya run docker.build
