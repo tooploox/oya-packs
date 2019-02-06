@@ -15,8 +15,10 @@ Import:
   ci: github..
 
 onPush: |
-  rake test
+  bundle install
+  bundle exec rake test
 
 onMergeToMaster: |
-  oya run heroku.deploy production $Values.projectName
+  bundle install
+  oya run heroku.deploy production $Project
 ```

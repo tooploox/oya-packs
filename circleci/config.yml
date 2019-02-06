@@ -7,24 +7,6 @@ defaults: &defaults
 
 version: 2
 jobs:
-  bundle_dependencies:
-    <<: *defaults
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/oya-project
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
-      - run: bundle install --jobs=4 --retry=3 --path vendor/bundle
-      - save_cache:
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-          paths:
-            - ~/repo/vendor/bundle
-      - persist_to_workspace:
-          root: .
-          paths: vendor/bundle
-
   oya_dependencies:
     <<: *defaults
     steps:
@@ -39,38 +21,38 @@ jobs:
             - oya
             - .oya
 
-  rake_test:
+  onPush:
     <<: *defaults
     steps:
       - checkout
       - attach_workspace:
           at: ~/oya-project
-      - run: bundle --path vendor/bundle
       - run: ./oya run onPush
 
 
-  deploy:
+  onMergeToMaster:
     <<: *defaults
     steps:
       - checkout
       - attach_workspace:
           at: ~/oya-project
-      - run: bundle --path vendor/bundle
       - run: ./oya run onMergeToMaster
 
 workflows:
   version: 2
   build-test-and-deploy:
     jobs:
-      - bundle_dependencies
       - oya_dependencies
-      - rake_test:
+      - onPush:
           requires:
-            - bundle_dependencies
             - oya_dependencies
-      - deploy:
+          filters:
+            branches:
+              ignore:
+                - master
+      - onMergeToMaster:
           requires:
-            - rake_test
+            - oya_dependencies
           filters:
             branches:
               only:
