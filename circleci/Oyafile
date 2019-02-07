@@ -1,5 +1,8 @@
 Project: cricleci
 
+Values:
+  image: circleci/ruby:2.5-node-browsers
+
 generate : |
   $BasePath/circleci.sh $BasePath
   echo -e "\033[0;32m Oya circleCI generated."
