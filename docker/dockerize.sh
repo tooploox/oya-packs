@@ -24,6 +24,6 @@ if [[ -n $(find . -name "__init__.py") ]]; then
 fi
 
 BasePath=$1
-oya render -f ./Oyafile -a docker $BasePath/Dockerfile-$lang
+oya render -f Oyafile -a docker $BasePath/Dockerfile-$lang
 mv Dockerfile-$lang Dockerfile
 
