@@ -5,7 +5,7 @@ Values:
   port: 8000
 
 generate: |
-  . $BasePath/dockerize.sh $BasePath
+  $BasePath/dockerize.sh $BasePath
 
 build: |
   echo "Docker -> build $image"
