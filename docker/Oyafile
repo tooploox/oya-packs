@@ -5,7 +5,13 @@ Values:
   port: 8000
 
 generate: |
-  $BasePath/dockerize.sh $BasePath
+  proceed="$$($BasePath/override.sh)"
+  if [ "$$proceed" = "Y" ]; then
+    echo "Dockerizing $$(pwd)"
+
+    lang="$$($BasePath/detectLang.sh)"
+    $Render("$BasePath/$$lang/Dockerfile")
+  fi
 
 build: |
   echo "Docker -> build $image"
