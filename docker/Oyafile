@@ -5,7 +5,7 @@ Values:
   port: 8000
 
 generate: |
-  proceed="$$($BasePath/override.sh)"
+  proceed="$$($BasePath/overwrite.sh)"
   if [ "$$proceed" = "Y" ]; then
     echo "Dockerizing $$(pwd)"
 
