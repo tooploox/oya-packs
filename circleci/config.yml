@@ -1,0 +1,59 @@
+defaults: &defaults
+  working_directory: ~/oya-project
+  docker:
+    - image: $image
+      environment:
+        RAILS_ENV: test
+
+version: 2
+jobs:
+  oya_dependencies:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/oya-project
+      - run: curl -O https://s3.eu-central-1.amazonaws.com/oyabinary/oya
+      - run: chmod +x oya
+      - persist_to_workspace:
+          root: .
+          paths:
+            - oya
+            - .oya
+
+  onPush:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/oya-project
+      - run: ./oya run onPush
+
+
+  onMergeToMaster:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/oya-project
+      - run: ./oya run onMergeToMaster
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - oya_dependencies
+      - onPush:
+          requires:
+            - oya_dependencies
+          filters:
+            branches:
+              ignore:
+                - master
+      - onMergeToMaster:
+          requires:
+            - oya_dependencies
+          filters:
+            branches:
+              only:
+                - master
