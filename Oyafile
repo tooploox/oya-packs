@@ -1,7 +1,5 @@
 Project: github.com/tooploox/oya-packs
 
 help: |
-  echo "Official set of packs for Oya."
+  echo "Official set of Oya packs."
 
-version: |
-  cat $BasePath/VERSION

@@ -1,4 +1,4 @@
-Project: docker
+Project: github.com/tooploox/oya-packs/docker
 
 Values:
   image: oya-project-image
@@ -25,5 +25,3 @@ stop: |
   echo "Docker -> stop $image"
   docker ps | grep $image | cut -d' ' -f1 | xargs docker stop
 
-version: |
-  cat $BasePath/VERSION

@@ -1,0 +1,17 @@
+Project: github.com/tooploox/oya-packs/heroku
+
+Values:
+  app: example-app
+
+init: |
+  echo "heroku init"
+  # heroku login
+  # heroku app:create
+  # add remotes 
+
+deploy: |
+  echo "Deploy"
+  # git push heroku master
+
+login: |
+  echo "heroku login"
