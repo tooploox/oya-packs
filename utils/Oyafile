@@ -1,0 +1,4 @@
+Project: github.com/tooploox/oya-packs/utils
+
+doIt: |
+  echo "-> Utils doing it"

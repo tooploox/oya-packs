@@ -1,0 +1,10 @@
+Project: github.com/tooploox/oya-packs/k8s
+
+init: |
+  echo "-> Init k8s"
+
+login: |
+  echo "-> login to k8s"
+
+deploy: |
+  echo "-> deploy k8s"
