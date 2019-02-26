@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "module": "commonjs",
+        "target": "es5",
+        "strict": true,
+        "sourceMap": false,
+        "types": ["jest"],
+        "lib": ["dom", "es6", "es2015.promise", "es2015", "esnext"],
+        "allowSyntheticDefaultImports": false,
+        "strictNullChecks": true,
+        "noImplicitAny": true,
+        "noEmitHelpers": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true
+    },
+    "allowJS": false,
+    "include": ["**/*.d.ts", "**/*.ts"],
+    "exclude": ["node_modules/*", "scripts", "dist"]
+}
