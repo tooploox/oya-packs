@@ -3,7 +3,7 @@
 Scaffold pack is a set of files with predefined project for easier and faster setup.
 
     $ oya import github.com/tooploox/oya-packs/scaffold
-    $ oya run docker.generate
+    $ oya run scaffold.generate
     
 Available scaffolds :
 
