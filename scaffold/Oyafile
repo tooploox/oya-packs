@@ -1,0 +1,25 @@
+Project: github.com/tooploox/oya-packs/scaffold
+
+generate: |
+  echo "Oya Scaffold generate. What do you want to generate ?"
+  echo " - nodejs-ts-backend"
+
+  read -p "> " project
+  case "$$project" in
+    nodejs-ts-backend)
+      $Tasks.nodejsTsBackend()
+      ;;
+    *)
+      echo "$$project not found"
+  esac
+    
+
+nodejsTsBackend: |
+  read -p "Proceed with generating scaffold for NodeJS TypeScript backend ? [y/N] > " yn
+  case "$$yn" in
+    y)
+      cp -r $BasePath/nodejs-ts-backend/ . && echo "Done"
+      ;;
+    *)
+      echo "Quiting"
+  esac
