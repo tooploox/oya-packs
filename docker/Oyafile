@@ -16,14 +16,18 @@ generate: |
   fi
 
 build: |
+  image=${Oya[image]}
   echo "Docker -> build $image"
   docker build -t $image .
 
 run: |
+  image=${Oya[image]}
+  port=${Oya[port]}
   echo "Docker -> run $image port $port"
   docker run -it -d -p $port:$port $image
 
 stop: |
+  image=${Oya[image]}
   echo "Docker -> stop $image"
   docker ps | grep $image | cut -d' ' -f1 | xargs docker stop
 
