@@ -1,4 +1,4 @@
-Project: docker
+Project: github.com/tooploox/oya-packs/docker
 
 Values:
   image: oya-project-image
