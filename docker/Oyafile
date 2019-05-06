@@ -5,12 +5,14 @@ Values:
   port: 8000
 
 generate: |
-  proceed="$$($BasePath/overwrite.sh)"
-  if [ "$$proceed" = "Y" ]; then
-    echo "Dockerizing $$(pwd)"
+  BasePath=${Oya[BasePath]}
+  echo $BasePath
+  proceed="$($BasePath/overwrite.sh)"
+  if [ "$proceed" = "Y" ]; then
+    echo "Dockerizing $(pwd)"
 
-    lang="$$($BasePath/detectLang.sh)"
-    $Render("$BasePath/$$lang/Dockerfile")
+    lang="$($BasePath/detectLang.sh)"
+    oya render $BasePath/$lang/Dockerfile
   fi
 
 build: |
@@ -25,3 +27,5 @@ stop: |
   echo "Docker -> stop $image"
   docker ps | grep $image | cut -d' ' -f1 | xargs docker stop
 
+version: |
+  cat ${Oya[BasePath]}/VERSION

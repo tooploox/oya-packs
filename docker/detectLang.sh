@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 DEFAULT_LANG="ruby"
 lang=$DEFAULT_LANG
 
