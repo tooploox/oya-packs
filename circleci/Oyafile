@@ -4,11 +4,12 @@ Values:
   image: circleci/ruby:2.5-node-browsers
 
 generate : |
-  proceed="$$($BasePath/overwrite.sh)"
-  if [ "$$proceed" = "Y" ]; then
+  BasePath=${Oya[BasePath]}
+  proceed="$($BasePath/overwrite.sh)"
+  if [ "$proceed" = "Y" ]; then
     echo "Generating circleCI config"
-    image="$$($BasePath/detectImage.sh)"
-    $Render("$BasePath/config.yml")
+    image="$($BasePath/detectImage.sh)"
+    oya render $BasePath/config.yml
     mkdir -p .circleci
     mv config.yml .circleci/.
     echo -e "\033[0;32m Oya circleCI generated."
