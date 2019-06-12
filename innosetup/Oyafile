@@ -1,0 +1,10 @@
+Project: InnoSetup
+
+compile: |
+  binDir=${Oya[BasePath]}/bin
+  if [[ ! -d "$binDir" ]]; then
+    mkdir $binDir
+    cd $binDir
+    unzip ${Oya[BasePath]}/innosetup.zip
+  fi;
+  wine $binDir/ISCC.exe $@
