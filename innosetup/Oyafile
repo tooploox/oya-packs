@@ -8,11 +8,13 @@ Values:
   setupFilesPath: 'setup/'
   appId: 'C06341D8-9A5F-47C9-823C-4A336C83EC7F'
   appVer: 'v0.0.1'
-  appName: 'InnoSetup'
+  appName: 'Oya.sh'
   appPublisher: 'Oya.sh'
   appUrl: 'https://oya.sh/'
   appBin32: ''
   appBin64: ''
+  certFile: 'cert/setup.cert'
+  keyFile: 'cert/setup.key'
 
 prepare: |
   cd ${Oya[BasePath]}/InnoSetup
@@ -39,17 +41,17 @@ compile: |
     oya run compile $setupFile
 
 sign: |
-  # dist="${Oya[projectPath]}/${Oya[distPath]}"
-  # in="oya_${CIRCLE_TAG}_windows_installer.exe"
-  # out="oya_${CIRCLE_TAG}_windows_installer_signed.exe"
+  path=${Oya[dockerVolPath]}
+  output=${Oya[outputPath]}
+  in=$path/$output/${Oya[outputFile]}.exe
+  out=$path/$output/${Oya[outputFile]}_signed.exe
+  appName=${Oya[appName]}
+  appUrl=${Oya[appUrl]}
+  cert=$path/${Oya[certFile]}
+  key=$path/${Oya[keyFile]}
 
-  osslsigncode sign -certs $cert -key $key \
-    -n "${Oya[appName]}" \
-    -i ${Oya[appUrl]} \
-    -t http://timestamp.verisign.com/scripts/timstamp.dll \
-    -in $dist/$in \
-    -out $dist/$out
-
-  mv $dist/$out $dist/$in
-
+  docker run \
+    -v `pwd`:${Oya[dockerVolPath]} \
+    ${Oya[dockerImageName]} \
+    oya run sign $in $out $cert $key $appName $appUrl
 
