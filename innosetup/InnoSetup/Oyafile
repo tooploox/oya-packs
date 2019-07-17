@@ -1,0 +1,7 @@
+Project: OyaPackInnoSetupForDocker
+
+prepare: |
+  unzip innosetup.zip
+
+compile: |
+  wine ISCC.exe $@
