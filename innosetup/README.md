@@ -21,7 +21,7 @@ Let say we have a project.
     $ oya import github.com/tooploox/oya-packs/innosetup
     $ oya run innosetup.prepare
     
-Set correct `Values` for innosetup pack.
+Set correct `Values` for innosetup pack. Espacially thouse starting with `app`.
 
     $ oya run innosetup.renderSetupFiles
     $ oya run innosetup.compile
