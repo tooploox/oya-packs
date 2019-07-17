@@ -1,39 +1,85 @@
 # Inno Setup pack
 
-Innosetup pack allows you to build windows installer for your project.
+Innosetup pack allows you to build windows installer for your tools.
+Pack Requires that you have already build your .exe files and the are in a project directory.
 It uses [InnoSetup](http://www.jrsoftware.org/isinfo.php). 
 It requires `docker`.
 
-## Import
+## Usage
 
+Let say we have a project.
+
+```
+.
+....
+└── dist
+    ├── binary.exe
+    └── binary32.exe
+```
+
+    $ oya init WindowsCliTool
     $ oya import github.com/tooploox/oya-packs/innosetup
+    $ oya run innosetup.prepare
     
+Set correct `Values` for innosetup pack.
+
+    $ oya run innosetup.renderSetupFiles
+    $ oya run innosetup.compile
+    $ oya run innosetup.sign
+    
+## Values
+
+In your project Oyafile set correct values for setup.
+
+```
+Values:
+  innosetup:
+    appId: 'C06341D8-9A5F-47C9-823C-4A336C83EC7F' # Windows UUID
+    appVer: 'v0.0.1'               # App Ver
+    appName: 'WindowsCliTool'      # App name
+    appPublisher: 'Oya.sh'         # App publisher
+    appUrl: 'https://example.com/' # Your page
+    appBin64: 'dist/binary.exe'    # Path to 64bit binnary
+    appBin32: 'dist/binary32.exe'  # Path to 32bit binnary
+    
+    outputPath: 'dist/'        # Path for installer binnary
+    outputFile: 'installer'    # Installer name `installer.exe`
+    setupFilesPath: 'setup/'   # Setup files path
+    
+    certFile: 'cert/setup.cert' # Cert file for sign task
+    keyFile: 'cert/setup.key'   # Key file for sign task
+    dockerImageName: 'oya_innosetup' # docker image name for innosetup
+    dockerVolPath: '/project'   # docker volumen name
+```
+
 ### Tasks
 
-- build
+- prepare
+- renderSetupFiles
+- compile
 - sign
-- gui
 
+#### Prepare
 
-#### build
-Build installer
+We use docker + wine to run InnoSetup. Prepare tasks builds docker image with Inno Setup
 
-    $ oya run innosetup.build
+    $ oya run innosetup.prepare
 
-- projectName
-- projectWebsite
-- binPath
-- distPath
-- setupFile
+#### RenderSetupFiles
+
+Each time you change a Values for innosetup you should rerender your setup files.
+
+    $ oya run innosetup.renderSetupFiles
+
+#### compile
+
+Compiles installer from config files.
+
+    $ oya run innosetup.compile
+
 
 #### sign
-Sign installer files.
+
+Sign installer files. It requires `certFile` and `keyFile` values to be set to correct files.
 
     $ oya run innosetup.sign
-
-- certs
-
-#### gui
-Run innosetup GUI. It allows you to create and test custom setupFiles
-
-    $ oya run innosetup.gui
