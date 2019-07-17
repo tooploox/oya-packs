@@ -18,7 +18,7 @@ prepare: |
   cd ${Oya[BasePath]}/InnoSetup
   docker build -t ${Oya[dockerImageName]} .
 
-renderSetupFile: |
+renderSetupFiles: |
   winePath=Z:${Oya[dockerVolPath]}
   outputDir=$winePath/${Oya[outputPath]}
   bin32=$winePath/${Oya[appBin32]}
