@@ -1,10 +1,57 @@
 Project: InnoSetup
 
+Values:
+  dockerImageName: 'oya_innosetup'
+  dockerVolPath: '/project'
+  outputPath: 'dist/'
+  outputFile: 'installer'
+  setupFilesPath: 'setup/'
+  appId: 'C06341D8-9A5F-47C9-823C-4A336C83EC7F'
+  appVer: 'v0.0.1'
+  appName: 'Oya.sh'
+  appPublisher: 'Oya.sh'
+  appUrl: 'https://oya.sh/'
+  appBin32: ''
+  appBin64: ''
+  certFile: 'cert/setup.cert'
+  keyFile: 'cert/setup.key'
+
+prepare: |
+  cd ${Oya[BasePath]}/InnoSetup
+  docker build -t ${Oya[dockerImageName]} .
+
+renderSetupFiles: |
+  winePath=Z:${Oya[dockerVolPath]}
+  outputDir=$winePath/${Oya[outputPath]}
+  bin32=$winePath/${Oya[appBin32]}
+  bin64=$winePath/${Oya[appBin64]}
+
+  oya render \
+     --set outputPath=$outputDir \
+     --set appBin32=$bin32 \
+     --set appBin64=$bin64 \
+     -o ${Oya[setupFilesPath]} \
+     ${Oya[BasePath]}/setup_tpl/
+
 compile: |
-  binDir=${Oya[BasePath]}/bin
-  if [[ ! -d "$binDir" ]]; then
-    mkdir $binDir
-    cd $binDir
-    unzip ${Oya[BasePath]}/innosetup.zip
-  fi;
-  wine $binDir/ISCC.exe $@
+  setupFile=Z:${Oya[dockerVolPath]}/${Oya[setupFilesPath]}setup.iss
+  docker run \
+    -v `pwd`:${Oya[dockerVolPath]} \
+    ${Oya[dockerImageName]} \
+    oya run compile $setupFile
+
+sign: |
+  path=${Oya[dockerVolPath]}
+  output=${Oya[outputPath]}
+  in=$path/$output/${Oya[outputFile]}.exe
+  out=$path/$output/${Oya[outputFile]}_signed.exe
+  appName=${Oya[appName]}
+  appUrl=${Oya[appUrl]}
+  cert=$path/${Oya[certFile]}
+  key=$path/${Oya[keyFile]}
+
+  docker run \
+    -v `pwd`:${Oya[dockerVolPath]} \
+    ${Oya[dockerImageName]} \
+    oya run sign $in $out $cert $key $appName $appUrl
+

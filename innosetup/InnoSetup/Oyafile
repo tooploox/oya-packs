@@ -1,0 +1,14 @@
+Project: OyaPackInnoSetupForDocker
+
+prepare: |
+  unzip innosetup.zip
+
+compile: |
+  wine ISCC.exe $@
+
+sign: |
+  osslsigncode sign \
+    -certs $3 -key $4 \
+    -n $5 -i $6 \
+    -t http://timestamp.verisign.com/scripts/timstamp.dll \
+    -in $1 -out $2
