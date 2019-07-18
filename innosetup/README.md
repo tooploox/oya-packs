@@ -1,7 +1,8 @@
 # Inno Setup pack
 
 Innosetup pack allows you to build windows installer for your tools.
-Pack Requires that you have already build your .exe files and the are in a project directory.
+We use InnoSetup executed with wine in docker container.
+Pack Requires that you already have windows binnaries in your project dir.
 It uses [InnoSetup](http://www.jrsoftware.org/isinfo.php). 
 It requires `docker`.
 
