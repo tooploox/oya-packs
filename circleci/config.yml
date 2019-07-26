@@ -2,10 +2,8 @@ defaults: &defaults
   working_directory: ~/oya-project
   docker:
     - image: <%= image %>
-      environment:
-      <%= for (key, val) in env { %>
-        <%= Upper(key) %>: "<%= val %>"
-      <% } %>
+      environment:<%= for (key, val) in env { %>
+        <%= Upper(key) %>: "<%= val %>"<% } %>
 
 version: 2
 jobs:
@@ -17,11 +15,6 @@ jobs:
           at: ~/oya-project
       - run: wget https://github.com/mozilla/sops/releases/download/3.3.1/sops_3.3.1_amd64.deb && sudo dpkg -i sops_3.3.1_amd64.deb
       - run: curl https://oya.sh/get | bash
-      - persist_to_workspace:
-          root: .
-          paths:
-            - oya
-            - .oya
 
   onPush:
     <<: *defaults
