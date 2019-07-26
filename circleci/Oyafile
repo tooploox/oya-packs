@@ -6,15 +6,12 @@ Values:
 
 generate : |
   BasePath=${Oya[BasePath]}
-  proceed="$($BasePath/overwrite.sh)"
-  if [ "$proceed" = "Y" ]; then
-    echo "Generating circleCI config"
-    image="$($BasePath/detectImage.sh)"
-    oya_ver=$(oya --version)
-    oya render -s circleci --set env.oya_ver="$oya_ver" $BasePath/config.yml
-    mkdir -p .circleci
-    mv config.yml .circleci/.
-    echo -e "Oya circleCI generated."
-    echo -e "[Warning] You have to edit your Oyafile to add onPush and onMergeToMaster hooks."
-    echo " Check README if you dont know how to do it."
-  fi
+  echo "Generating circleCI config"
+  image="$($BasePath/detectImage.sh)"
+  oya_ver=$(oya --version)
+  oya render -s circleci --set env.oya_ver="$oya_ver" $BasePath/config.yml
+  mkdir -p .circleci
+  mv config.yml .circleci/.
+  echo -e "Oya circleCI generated."
+  echo -e "[Warning] You have to edit your Oyafile to add onPush and onMergeToMaster hooks."
+  echo " Check README if you dont know how to do it."

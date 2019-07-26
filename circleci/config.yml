@@ -4,7 +4,7 @@ defaults: &defaults
     - image: <%= image %>
       environment:
       <%= for (key, val) in env { %>
-        <%= Upper(key) %>: <%= val %>
+        <%= Upper(key) %>: "<%= val %>"
       <% } %>
 
 version: 2
