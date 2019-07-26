@@ -1,3 +1,5 @@
+#!/bin/bash
+
 DEFAULT_IMAGE=circleci/classic:latest
 image=$DEFAULT_IMAGE
 
