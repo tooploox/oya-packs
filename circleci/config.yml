@@ -1,9 +1,11 @@
 defaults: &defaults
   working_directory: ~/oya-project
   docker:
-    - image: $image
+    - image: <%= image %>
       environment:
-        RAILS_ENV: test
+      <%= for (key, val) in env { %>
+        <%= Upper(key) %>: <%= val %>
+      <% } %>
 
 version: 2
 jobs:
@@ -13,8 +15,8 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/oya-project
-      - run: curl -O https://s3.eu-central-1.amazonaws.com/oyabinary/oya
-      - run: chmod +x oya
+      - run: wget https://github.com/mozilla/sops/releases/download/3.3.1/sops_3.3.1_amd64.deb && dpkg -i sops_3.3.1_amd64.deb
+      - run: curl https://oya.sh/get | bash
       - persist_to_workspace:
           root: .
           paths:

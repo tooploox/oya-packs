@@ -9,10 +9,18 @@
 After generate Oyafile needs to be changed by adding onPush and onMergeToMaster hooks. eg:
 
 ```
-Project:
+Project: CircleCiPack
+
+Require:
+  github.com/tooploox/oya-packs/circleci: v0.0.3
+
 Import:
-  heroku: github.com/tooploox/packs/heroku
-  ci: github..
+  circleci: github.com/tooploox/oya-packs/circleci
+  
+Values:
+  circleci:
+    env:
+      project_name: 'Project'
 
 onPush: |
   bundle install
