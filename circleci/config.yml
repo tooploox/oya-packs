@@ -15,6 +15,8 @@ jobs:
           at: ~/oya-project
       - run: wget https://github.com/mozilla/sops/releases/download/3.3.1/sops_3.3.1_amd64.deb && sudo dpkg -i sops_3.3.1_amd64.deb
       - run: curl https://oya.sh/get | bash
+<%= if(Len(dependencies_task) > 0) { %>      - run: ./oya run <%= dependencies_task %>
+<% } %>
 
   onPush:
     <<: *defaults
@@ -41,14 +43,16 @@ workflows:
       - onPush:
           requires:
             - oya_dependencies
-          filters:
+<%= if(onPush["ignore_master"]) { %>          filters:
             branches:
               ignore:
                 - master
+<% } %>
       - onMergeToMaster:
           requires:
             - oya_dependencies
-          filters:
+<%= if(onMergeToMaster["ignore_master"]) { %>          filters:
             branches:
               only:
                 - master
+<% } %>
