@@ -6,7 +6,6 @@ Values:
 
 generate: |
   BasePath=${Oya[BasePath]}
-  echo $BasePath
   proceed="$($BasePath/overwrite.sh)"
   if [ "$proceed" = "Y" ]; then
     echo "Dockerizing $(pwd)"
