@@ -11,8 +11,10 @@ Values:
   appName: 'Oya.sh'
   appPublisher: 'Oya.sh'
   appUrl: 'https://oya.sh/'
-  appBin32: ''
-  appBin64: ''
+  appBin32:
+    # - 'dist/binary32.exe'
+  appBin64:
+    #- 'dist/binary64.exe'
   certFile: 'cert/setup.cert'
   keyFile: 'cert/setup.key'
 
@@ -23,13 +25,10 @@ prepare: |
 renderSetupFiles: |
   winePath=Z:${Oya[dockerVolPath]}
   outputDir=$winePath/${Oya[outputPath]}
-  bin32=$winePath/${Oya[appBin32]}
-  bin64=$winePath/${Oya[appBin64]}
 
   oya render \
      --set outputPath=$outputDir \
-     --set appBin32=$bin32 \
-     --set appBin64=$bin64 \
+     --set winePath=$winePath \
      -o ${Oya[setupFilesPath]} \
      ${Oya[BasePath]}/setup_tpl/
 

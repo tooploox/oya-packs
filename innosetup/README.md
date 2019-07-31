@@ -40,8 +40,10 @@ Values:
     appName: 'WindowsCliTool'      # App name
     appPublisher: 'Oya.sh'         # App publisher
     appUrl: 'https://example.com/' # Your page
-    appBin64: 'dist/binary.exe'    # Path to 64bit binnary
-    appBin32: 'dist/binary32.exe'  # Path to 32bit binnary
+    appBin64:                      # List of files for 64bit systems - REQUIRED
+      - 'dist/binary.exe'    
+    appBin32:                      # List of files for 32bit systems - REQUIRED
+      - 'dist/binary32.exe'
     
     outputPath: 'dist/'        # Path for installer binnary
     outputFile: 'installer'    # Installer name `installer.exe`

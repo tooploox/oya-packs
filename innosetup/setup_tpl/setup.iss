@@ -6,8 +6,6 @@
 #define MyAppPublisher "<%= appPublisher %>"
 #define MyAppURL "<%= appUrl %>"
 
-#define MyAppBin32 "<%= appBin32 %>"
-#define MyAppBin64 "<%= appBin64 %>"
 #define MyAppOutputDir "<%= outputPath %>"
 #define MyAppOutputFile "<%= outputFile %>"
 
@@ -39,8 +37,11 @@ ChangesEnvironment=true
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: {#MyAppBin64}; DestDir: "{app}"; Flags: ignoreversion; Check: IsWin64;
-Source: {#MyAppBin32}; DestDir: "{app}"; Flags: ignoreversion; Check: "not IsWin64";
+<%= for (val) in appBin64 { %>
+Source: "<%= winePath + "/" + val %>"; DestDir: "{app}"; Flags: ignoreversion; Check: IsWin64;<% } %>
+
+<%= for (val) in appBin32 { %>
+Source: "<%= winePath + "/" + val %>"; DestDir: "{app}"; Flags: ignoreversion; Check: "not IsWin64";<% } %>
 
 [Tasks]
 Name: envPath; Description: "Add to PATH"
