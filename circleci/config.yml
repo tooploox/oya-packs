@@ -10,30 +10,53 @@ jobs:
   oya_dependencies:
     <<: *defaults
     steps:
+      - run: echo 'export PATH=~/.oya/bin/:$PATH' >> $BASH_ENV
+      - run: sudo apt-get update && sudo apt-get install -y wget curl
+      - run: mkdir -p ~/.oya/bin
+      - run: cd ~/.oya/ && wget https://github.com/mozilla/sops/releases/download/3.3.1/sops_3.3.1_amd64.deb
+      - run: sudo dpkg -i ~/.oya/sops_3.3.1_amd64.deb
+      - run: curl https://oya.sh/get | bash
+      - run: sudo mv /usr/local/bin/oya ~/.oya/bin
+      - save_cache:
+          key: oya-cache-v1-{{ arch }}-{{ .Branch }}
+          paths:
+            - ~/.oya
       - checkout
       - attach_workspace:
           at: ~/oya-project
-      - run: wget https://github.com/mozilla/sops/releases/download/3.3.1/sops_3.3.1_amd64.deb && sudo dpkg -i sops_3.3.1_amd64.deb
-      - run: curl https://oya.sh/get | bash
-<%= if(Len(dependencies_task) > 0) { %>      - run: ./oya run <%= dependencies_task %>
+<%= if(Len(dependencies_task) > 0) { %>      - run: oya run <%= dependencies_task %>
 <% } %>
 
   onPush:
     <<: *defaults
     steps:
+      - restore_cache:
+          keys:
+            - oya-cache-v1-{{ arch }}-{{ .Branch }}
+            - oya-cache-v1
+      - run: |
+          echo 'export PATH=~/.oya/bin/:$PATH' >> $BASH_ENV
+          sudo dpkg -i ~/.oya/sops_3.3.1_amd64.deb
       - checkout
       - attach_workspace:
           at: ~/oya-project
-      - run: ./oya run onPush
+      - run: oya run onPush
 
 
   onMergeToMaster:
     <<: *defaults
     steps:
+      - restore_cache:
+          keys:
+            - oya-cache-v1-{{ arch }}-{{ .Branch }}
+            - oya-cache-v1
+      - run: |
+          echo 'export PATH=~/.oya/bin/:$PATH' >> $BASH_ENV
+          sudo dpkg -i ~/.oya/sops_3.3.1_amd64.deb
       - checkout
       - attach_workspace:
           at: ~/oya-project
-      - run: ./oya run onMergeToMaster
+      - run: oya run onMergeToMaster
 
 workflows:
   version: 2
@@ -51,8 +74,7 @@ workflows:
       - onMergeToMaster:
           requires:
             - oya_dependencies
-<%= if(onMergeToMaster["ignore_master"]) { %>          filters:
+          filters:
             branches:
               only:
                 - master
-<% } %>

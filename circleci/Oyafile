@@ -5,8 +5,6 @@ Values:
   env:
   onPush:
     ignore_master: no
-  onMergeToMaster:
-    ignore_master: no
 
 generate : |
   BasePath=${Oya[BasePath]}
