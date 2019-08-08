@@ -1,0 +1,47 @@
+# -*- mode: yaml -*-
+
+Project: AiBootstrap
+
+Values:
+  python_interpreter: python3
+  project_description: My awesome AI project
+  project_name: Literal AI
+  author: John Doe
+
+bootstrap.Doc: Bootstraps your new AI project
+bootstrap: |
+  set -e
+  echo Bootstraping your amazing project!
+  oya run ai.gitinit
+  oya run ai.virtualenv
+  oya run ai.requirements
+  oya run ai.dockerfile
+  oya run ai.cookiecutter
+
+gitinit: |
+  git status; test $? -eq 128 && git init .
+
+virtualenv: |
+  pip=`type pip3 >/dev/null; if [ $? -eq 0 ]; then; echo "pip3"; else; echo "pip"; fi`
+  $pip install virtualenv
+  virtualenv venv
+  echo venv > .gitignore
+  source venv/bin/activate
+
+requirements: |
+  BasePath=${Oya[BasePath]}
+  oya render $BasePath/templates/requirements.txt
+  pip install -r requirements.txt
+
+dockerfile: |
+  BasePath=${Oya[BasePath]}
+  oya render $BasePath/templates/Dockerfile
+
+cookiecutter: |
+  BasePath=${Oya[BasePath]}
+  PythonInterpreter=`type python3 >/dev/null; if [ $? -eq 0 ]; then; echo "python3"; else; echo "python"; fi`
+  oya render \
+    -s ai
+    --set ai.python_interpreter=$PythonInterpreter
+    $BasePath/templates/cookiecutter.json
+  cookiecutter --no-input -o . https://github.com/drivendata/cookiecutter-data-science
