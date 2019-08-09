@@ -8,30 +8,35 @@ Values:
   project_name: Literal AI
   author: John Doe
 
+generate:
+  oya render ${Oya[BasePath]}/templates/values.oya
+  echo "Generated random values for you AI project. Good luck, sucker!"
+
 bootstrap.Doc: Bootstraps your new AI project
 bootstrap: |
   set -e
   echo Bootstraping your amazing project!
-  oya run ai.gitinit
-  oya run ai.virtualenv
-  oya run ai.requirements
-  oya run ai.dockerfile
-  oya run ai.cookiecutter
+  oya run gitinit
+  oya run virtualenv
+
+postboostrap: |
+  oya run requirements
+  oya run dockerfile
+  oya run cookiecutter
 
 gitinit: |
   git status; test $? -eq 128 && git init .
 
 virtualenv: |
-  pip=`type pip3 >/dev/null; if [ $? -eq 0 ]; then; echo "pip3"; else; echo "pip"; fi`
-  $pip install virtualenv
+  type pip3 >/dev/null && PipInterpreter="pip3" || PipInterpreter="pip"
+  $PipInterpreter install virtualenv
   virtualenv venv
-  echo venv > .gitignore
-  source venv/bin/activate
+  (grep venv .gitignore 2>&1 >/dev/null) || (echo venv >> .gitignore)
 
 requirements: |
   BasePath=${Oya[BasePath]}
   oya render $BasePath/templates/requirements.txt
-  pip install -r requirements.txt
+  venv/bin/pip install -r requirements.txt
 
 dockerfile: |
   BasePath=${Oya[BasePath]}
@@ -39,9 +44,5 @@ dockerfile: |
 
 cookiecutter: |
   BasePath=${Oya[BasePath]}
-  PythonInterpreter=`type python3 >/dev/null; if [ $? -eq 0 ]; then; echo "python3"; else; echo "python"; fi`
-  oya render \
-    -s ai
-    --set ai.python_interpreter=$PythonInterpreter
-    $BasePath/templates/cookiecutter.json
+  oya render -s ai $BasePath/templates/cookiecutter.json
   cookiecutter --no-input -o . https://github.com/drivendata/cookiecutter-data-science
